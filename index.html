@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OBISL Gamified Learning - Module 6</title>
+  
+  <!-- Premium Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Sinhala:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberDark: '#030712',
+            cyberCard: '#0f172a',
+            cyberCyan: '#00f0ff',
+            cyberEmerald: '#10b981',
+            cyberGold: '#f59e0b',
+            cyberDanger: '#ef4444',
+            cyberBorder: '#1e293b'
+          },
+          fontFamily: {
+            sans: ['Noto Sans', 'Noto Sans Sinhala', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            serif: ['Cinzel', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #030712;
+      font-family: 'Noto Sans', 'Noto Sans Sinhala', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    /* Strict Mobile-First Layout Rules */
+    .viewport-lock {
+      height: 100vh;
+      height: -webkit-fill-available;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #00f0ff;
+      border-radius: 4px;
+    }
+
+    /* Elegant tech effects and state animations */
+    @keyframes pulse-cyan {
+      0%, 100% { box-shadow: 0 0 8px rgba(0, 240, 255, 0.3); }
+      50% { box-shadow: 0 0 16px rgba(0, 240, 255, 0.6); }
+    }
+    .pulse-cyan-glow {
+      animation: pulse-cyan 2s infinite;
+    }
+
+    @keyframes pulse-gold {
+      0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); }
+      50% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.6); }
+    }
+    .pulse-gold-glow {
+      animation: pulse-gold 2s infinite;
+    }
+
+    /* Range control styling */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: #1e293b;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00f0ff;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00f0ff;
+      transition: background 0.15s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      background: #10b981;
+      box-shadow: 0 0 12px #10b981;
+    }
+  </style>
+</head>
+<body class="viewport-lock text-slate-100 antialiased">
+
+  <!-- ==================== 1. FIXED APP HEADER (6vh) ==================== -->
+  <header class="h-[6vh] min-h-[40px] bg-[#090f24] border-b border-indigo-950 px-4 flex items-center justify-between z-50">
+    <div class="flex items-center gap-2 max-w-[70%]">
+      <span class="w-2 h-2 rounded-full bg-cyberCyan animate-ping flex-shrink-0"></span>
+      <h1 id="headerBrand" class="font-display font-bold text-[9px] min-[375px]:text-xs sm:text-sm tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 truncate">
+        OBISL GAMIFIED - MODULE 6: TRAINING & DEVELOPMENT
+      </h1>
+    </div>
+
+    <!-- Mastery Badge & Language Toggle -->
+    <div class="flex items-center gap-4">
+      <!-- Master Certification Badge Button (Unlocked after completing all activities) -->
+      <button id="headerBadgeBtn" onclick="openCertModal()" class="opacity-40 cursor-not-allowed transition-all duration-300 relative group flex items-center justify-center" disabled>
+        <span class="absolute -inset-1 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 opacity-0 group-hover:opacity-100 blur transition duration-300"></span>
+        <div class="bg-slate-950 rounded-full p-1.5 relative">
+          <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+        </div>
+        <!-- Tooltip -->
+        <span id="badgeTooltip" class="absolute top-10 right-0 w-48 p-2 bg-slate-900 border border-indigo-950 text-[10px] rounded text-slate-300 shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 leading-relaxed">
+          Mastery Badge: Locked. Complete all 4 simulators to unlock your certification!
+        </span>
+      </button>
+
+      <!-- Language Toggle -->
+      <button id="langToggle" onclick="toggleLanguage()" class="bg-slate-950 border border-indigo-900/60 px-2.5 py-1 rounded text-[11px] font-display font-semibold hover:border-cyberCyan hover:text-cyberCyan transition-all flex-shrink-0">
+        ENG | සිංහල
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== 2. SLIDE NAVIGATION BAR (5vh) ==================== -->
+  <nav class="h-[5vh] min-h-[30px] bg-[#0c132c] border-b border-indigo-950/80 flex items-center justify-around text-[10px] sm:text-xs font-semibold z-40">
+    <button id="navTab0" onclick="switchStep(0)" class="flex-1 py-2 text-center border-b-2 border-cyberCyan text-cyberCyan font-display uppercase tracking-wider transition-all">
+      1. TNA
+    </button>
+    <button id="navTab1" onclick="switchStep(1)" class="flex-1 py-2 text-center border-b-2 border-transparent text-slate-400 font-display uppercase tracking-wider transition-all">
+      2. OJT/OFF
+    </button>
+    <button id="navTab2" onclick="switchStep(2)" class="flex-1 py-2 text-center border-b-2 border-transparent text-slate-400 font-display uppercase tracking-wider transition-all">
+      3. EVAL
+    </button>
+    <button id="navTab3" onclick="switchStep(3)" class="flex-1 py-2 text-center border-b-2 border-transparent text-slate-400 font-display uppercase tracking-wider transition-all">
+      4. ROI/BSR
+    </button>
+  </nav>
+
+  <!-- ==================== 3. TOP VIEWPORT: HTML5 CANVAS (38vh) ==================== -->
+  <section class="h-[38vh] w-full relative bg-[#050815] overflow-hidden border-b border-indigo-950">
+    
+    <!-- Dynamic overlay task indicator -->
+    <div class="absolute top-2 left-3 bg-slate-950/80 backdrop-blur-md border border-indigo-950 px-2.5 py-1 rounded text-[10px] text-cyan-400 font-display z-10 flex items-center gap-1.5 shadow-lg">
+      <span class="w-1.5 h-1.5 rounded-full bg-cyberCyan animate-ping"></span>
+      <span id="canvasOverlayMission">Task: Sort the Performance Gaps</span>
+    </div>
+
+    <!-- GAME BRIEFING & START GAME OVERLAY -->
+    <div id="briefingOverlay" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md z-30 flex flex-col items-center justify-center p-4 text-center transition-all duration-300">
+      <div class="max-w-md space-y-3.5 transform translate-y-0 transition-transform duration-300">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-cyberCyan/10 border border-cyberCyan/30 rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyberCyan animate-pulse"></span>
+          <span id="briefingBadge" class="text-[9px] uppercase tracking-wider text-cyberCyan font-bold">SIMULATION BRIEFING</span>
+        </div>
+        <h3 id="briefingTitle" class="text-base font-display font-bold text-slate-100 tracking-wide uppercase">TNA DIAGNOSTICS</h3>
+        <p id="briefingText" class="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
+          Evaluate performance bottlenecks at Nexus Financial. Sort the 6 issues into Capability Deficits (Can't Do) and Motivational Barriers (Won't Do). Target: 100% correct.
+        </p>
+        <button id="startGameBtn" onclick="startGameAction()" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-display font-bold rounded-lg shadow-lg shadow-cyan-500/20 text-xs uppercase tracking-wider transition-all pulse-cyan-glow transform active:scale-95">
+          START SIMULATOR
+        </button>
+      </div>
+    </div>
+
+    <!-- Celebration/Success Banner Overlay -->
+    <div id="successOverlay" class="absolute inset-0 bg-cyberEmerald/10 pointer-events-none opacity-0 flex flex-col items-center justify-center transition-all duration-300 z-10">
+      <div class="scale-90 bg-slate-900/95 border border-cyberEmerald px-5 py-3 rounded-xl shadow-2xl text-center space-y-1 transform transition-transform duration-300" id="successBanner">
+        <h3 class="text-cyberEmerald font-display font-bold text-sm tracking-wider" id="successBannerTitle">GOAL COMPLETED!</h3>
+        <p class="text-[11px] text-slate-300 font-display" id="successBannerSub">Excellent HR engineering calibration.</p>
+      </div>
+    </div>
+
+    <canvas id="appCanvas" class="w-full h-full block"></canvas>
+  </section>
+
+  <!-- ==================== 4. BOTTOM VIEWPORT: CARD SCROLLER (45vh) ==================== -->
+  <main class="h-[45vh] bg-[#050815] relative overflow-hidden flex flex-col">
+    
+    <div class="flex-1 overflow-hidden relative">
+
+      <!-- ==================== CARD 1: TRAINING NEEDS ANALYSIS ==================== -->
+      <article id="stepCard0" class="absolute inset-0 p-4 overflow-y-auto custom-scrollbar flex flex-col justify-between">
+        <div class="space-y-3">
+          <div class="flex justify-between items-start border-b border-indigo-950 pb-2">
+            <div>
+              <span class="text-xs text-cyberCyan font-display font-bold tracking-widest uppercase" id="card1Sub">TNA DIAGNOSTICS</span>
+              <h2 class="text-base sm:text-lg font-display font-bold text-slate-100 animate-pulse" id="card1Title">1. The Capability Rift</h2>
+            </div>
+            <span class="bg-cyberCyan/10 border border-cyberCyan/30 text-cyberCyan px-2 py-0.5 rounded text-[10px] font-display" id="card1Badge">Can't Do vs Won't Do</span>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed" id="card1Desc">
+            Differentiate between performance challenges caused by competency deficits ("Can't Do") versus motivational/environmental roadblocks ("Won't Do"). Sorting this correctly ensures we don't waste budget training employees who simply lack systemic incentives.
+          </p>
+
+          <!-- Objective Progress Indicators -->
+          <div class="bg-slate-900/60 border border-indigo-950 p-3 rounded-lg flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-display font-semibold" id="card1TargetLabel">Classification Progress:</span>
+            <span id="step1Score" class="text-sm font-display font-bold text-cyberCyan">0 / 6 SCENARIOS PLACED</span>
+          </div>
+
+          <!-- KNOWLEDGE EXPANDER -->
+          <details class="bg-slate-900 border border-indigo-950 rounded-lg group transition-colors duration-150">
+            <summary class="list-none flex justify-between items-center p-3 cursor-pointer select-none">
+              <span class="text-xs font-display font-semibold text-emerald-400 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.754 18.477 18.168 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span id="card1ExpTitle">Theoretical Deep-Dive (TNA)</span>
+              </span>
+              <span class="transition-transform duration-200 group-open:rotate-180 text-emerald-400">▼</span>
+            </summary>
+            <div class="p-3 border-t border-indigo-950 text-xs text-slate-300 space-y-2 leading-relaxed">
+              <p id="card1ExpText1">
+                A common corporate pitfall is to apply standard classroom training as a universal cure for operational shortfalls. According to established HR frameworks, a Training Needs Analysis (TNA) must systematically evaluate root-causes using data-driven metrics.
+              </p>
+              <div class="bg-black/40 p-2.5 rounded border border-indigo-950/80 font-mono text-[10px] text-cyan-300">
+                <span class="text-slate-400 font-sans">Formula of Gap:</span> Gap (%) = (Target Competency - Actual Competency) / Target Competency
+              </div>
+              <p id="card1ExpText2">
+                If the workforce lacks foundational skills, it is a <strong>Capability Deficit (Can't Do)</strong>. If performance is bottlenecked by rewards, commission structure, or tooling latency, it represents a <strong>Motivational Deficit (Won't Do)</strong>.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <button id="step0Action" onclick="nextStep()" class="w-full mt-4 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-display font-bold py-3 rounded-lg shadow-lg shadow-cyan-500/10 text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+          <span id="card1Btn">CONTINUE TO METHODOLOGIES →</span>
+        </button>
+      </article>
+
+      <!-- ==================== CARD 2: TRAINING METHODOLOGIES ==================== -->
+      <article id="stepCard1" class="absolute inset-0 p-4 overflow-y-auto custom-scrollbar flex flex-col justify-between hidden">
+        <div class="space-y-3">
+          <div class="flex justify-between items-start border-b border-indigo-950 pb-2">
+            <div>
+              <span class="text-xs text-amber-500 font-display font-bold tracking-widest uppercase" id="card2Sub">METHODOLOGY MIX</span>
+              <h2 class="text-base sm:text-lg font-display font-bold text-slate-100" id="card2Title">2. Strategic Balancing Act</h2>
+            </div>
+            <span class="bg-amber-500/10 border border-amber-500/30 text-amber-500 px-2 py-0.5 rounded text-[10px] font-display" id="card2Badge">OJT vs Off-JT</span>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed" id="card2Desc">
+            Calibrate On-the-Job (OJT) and Off-the-Job (Off-JT) training hours. Achieve <strong>Practical Skills &ge; 80%</strong> and <strong>Theoretical Knowledge &ge; 80%</strong> simultaneously, without exceeding the tight budget of <strong>$5,000</strong>.
+          </p>
+
+          <!-- Sliders Box (Direct HTML Binding to Canvas) -->
+          <div class="bg-slate-900/60 border border-indigo-950 p-3 rounded-lg space-y-3.5">
+            <!-- Slider 1 -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-display">
+                <span class="text-slate-400 font-semibold" id="slider1Label">On-the-Job Hours (OJT):</span>
+                <span id="valOjt" class="text-cyberCyan font-bold">50 hrs</span>
+              </div>
+              <input type="range" id="inputOjt" min="0" max="100" value="50" oninput="updateMethodologySliders()">
+            </div>
+
+            <!-- Slider 2 -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-display">
+                <span class="text-slate-400 font-semibold" id="slider2Label">Off-the-Job Hours (Off-JT):</span>
+                <span id="valOff" class="text-emerald-400 font-bold">50 hrs</span>
+              </div>
+              <input type="range" id="inputOff" min="0" max="100" value="50" oninput="updateMethodologySliders()">
+            </div>
+          </div>
+
+          <!-- Real-Time Metrics Output -->
+          <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-display bg-slate-900/40 border border-indigo-950 p-2.5 rounded-lg">
+            <div>
+              <span class="text-slate-400 block" id="metPrac">Practical Skill</span>
+              <span id="outPrac" class="text-xs sm:text-sm font-bold text-amber-500">0%</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block" id="metTheo">Theory Score</span>
+              <span id="outTheo" class="text-xs sm:text-sm font-bold text-cyberCyan">0%</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block" id="metCost">Total Budget</span>
+              <span id="outCost" class="text-xs sm:text-sm font-bold text-emerald-400">$0</span>
+            </div>
+          </div>
+
+          <!-- KNOWLEDGE EXPANDER -->
+          <details class="bg-slate-900 border border-indigo-950 rounded-lg group transition-colors duration-150">
+            <summary class="list-none flex justify-between items-center p-3 cursor-pointer select-none">
+              <span class="text-xs font-display font-semibold text-emerald-400 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.754 18.477 18.168 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span id="card2ExpTitle">Theoretical Deep-Dive (OJT & Off-JT)</span>
+              </span>
+              <span class="transition-transform duration-200 group-open:rotate-180 text-emerald-400">▼</span>
+            </summary>
+            <div class="p-3 border-t border-indigo-950 text-xs text-slate-300 space-y-2 leading-relaxed">
+              <p id="card2ExpText1">
+                <strong>On-the-Job Training (OJT)</strong> yields a high transference rate for physical execution skills. As analyzed in Malcolm Knowles' <em>Andragogy (Adult Learning Theory)</em>, adult learning is highly problem-centered and benefits directly from contextual shadowing.
+              </p>
+              <div class="bg-black/40 p-2.5 rounded border border-indigo-950/80 font-mono text-[10px] text-amber-300">
+                <p>OJT cost = $20 / hour | Practical Weight = 1.2x | Theory Weight = 0.25x</p>
+                <p>Off-JT cost = $35 / hour | Practical Weight = 0.2x | Theory Weight = 1.15x</p>
+              </div>
+              <p id="card2ExpText2">
+                <strong>Off-the-Job Training (Off-JT)</strong> is structured and removes the student from operational disruptions, making it premium for cognitive theory acquisition, but incurs a higher hourly setup fee.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <button id="step1Action" onclick="nextStep()" class="w-full mt-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-display font-bold py-3 rounded-lg shadow-lg shadow-amber-500/10 text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+          <span id="card2Btn">CONTINUE TO EVALUATION →</span>
+        </button>
+      </article>
+
+      <!-- ==================== CARD 3: KIRKPATRICK'S EVALUATION ==================== -->
+      <article id="stepCard2" class="absolute inset-0 p-4 overflow-y-auto custom-scrollbar flex flex-col justify-between hidden">
+        <div class="space-y-3">
+          <div class="flex justify-between items-start border-b border-indigo-950 pb-2">
+            <div>
+              <span class="text-xs text-emerald-400 font-display font-bold tracking-widest uppercase" id="card3Sub">EVALUATION METRICS</span>
+              <h2 class="text-base sm:text-lg font-display font-bold text-slate-100" id="card3Title">3. Kirkpatrick's Pipeline</h2>
+            </div>
+            <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-display" id="card3Badge">4 Levels of Evaluation</span>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed" id="card3Desc">
+            Rigorous programs require rigorous feedback pipelines. Drag and sequence Kirkpatrick's evaluation hierarchy into their correct chronological sockets on canvas, ascending from initial reaction to deep commercial results.
+          </p>
+
+          <!-- Interactive Sockets Status -->
+          <div class="bg-slate-900/60 border border-indigo-950 p-3 rounded-lg flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-display font-semibold" id="card3TargetLabel">Timeline Correctness:</span>
+            <span id="step3ScoreText" class="text-sm font-display font-bold text-cyberEmerald">0 / 4 PLACED</span>
+          </div>
+
+          <!-- KNOWLEDGE EXPANDER -->
+          <details class="bg-slate-900 border border-indigo-950 rounded-lg group transition-colors duration-150">
+            <summary class="list-none flex justify-between items-center p-3 cursor-pointer select-none">
+              <span class="text-xs font-display font-semibold text-emerald-400 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.754 18.477 18.168 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span id="card3ExpTitle">Theoretical Deep-Dive (Kirkpatrick Model)</span>
+              </span>
+              <span class="transition-transform duration-200 group-open:rotate-180 text-emerald-400">▼</span>
+            </summary>
+            <div class="p-3 border-t border-indigo-950 text-xs text-slate-300 space-y-2 leading-relaxed">
+              <p id="card3ExpText1">
+                Designed by Donald Kirkpatrick, this 4-level architecture provides a systematic ladder to verify human capital progression:
+              </p>
+              <div class="bg-black/40 p-2.5 rounded border border-indigo-950/80 space-y-1 font-mono text-[10px] text-emerald-300">
+                <p>1. Reaction: NPS, pulse surveys & subjective sentiment.</p>
+                <p>2. Learning: Quantifiable knowledge tests & simulations.</p>
+                <p>3. Behavior: Real-world job transfer & 360-degree feedback.</p>
+                <p>4. Results: Macro operational ROI, churn drop, production rate.</p>
+              </div>
+              <p id="card3ExpText2">
+                HR research demonstrates that most organizations struggle because they only track Level 1 (Reaction) and Level 2 (Learning), failing to measure actual, long-term workplace behavior change or bottom-line business outcomes.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <button id="step2Action" onclick="nextStep()" class="w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-display font-bold py-3 rounded-lg shadow-lg shadow-emerald-500/10 text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+          <span id="card3Btn">CONTINUE TO TALENT METRICS →</span>
+        </button>
+      </article>
+
+      <!-- ==================== CARD 4: SUCCESSION PLANNING & ROI ==================== -->
+      <article id="stepCard3" class="absolute inset-0 p-4 overflow-y-auto custom-scrollbar flex flex-col justify-between hidden">
+        <div class="space-y-3">
+          <div class="flex justify-between items-start border-b border-indigo-950 pb-2">
+            <div>
+              <span class="text-xs text-yellow-500 font-display font-bold tracking-widest uppercase" id="card4Sub">TALENT FORECASTING</span>
+              <h2 class="text-base sm:text-lg font-display font-bold text-slate-100" id="card4Title">4. Bench Strength & ROI</h2>
+            </div>
+            <span class="bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 px-2 py-0.5 rounded text-[10px] font-display" id="card4Badge">BSR &ge; 2.0 & ROI &ge; 150%</span>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed" id="card4Desc">
+            Maximize your corporate bench defense! First, **drag and assign all 10 successors** on the canvas to critical leadership slots to reach a **Bench Strength Ratio (BSR) &ge; 2.0**. Second, adjust financial sliders below to optimize **Training ROI &ge; 150%**.
+          </p>
+
+          <!-- Sliders Box -->
+          <div class="bg-slate-900/60 border border-indigo-950 p-3 rounded-lg space-y-3.5">
+            <!-- Spend Slider -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-display">
+                <span class="text-slate-400 font-semibold" id="slider3Label">Total Training Costs ($):</span>
+                <span id="valSpend" class="text-cyberCyan font-bold">$4,000</span>
+              </div>
+              <input type="range" id="inputSpend" min="1000" max="10000" step="500" value="4000" oninput="updateRoiSliders()">
+            </div>
+
+            <!-- Benefit Slider -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-display">
+                <span class="text-slate-400 font-semibold" id="slider4Label">Net Financial Benefits ($):</span>
+                <span id="valBenefit" class="text-emerald-400 font-bold">$12,000</span>
+              </div>
+              <input type="range" id="inputBenefit" min="3000" max="30000" step="1000" value="12000" oninput="updateRoiSliders()">
+            </div>
+          </div>
+
+          <!-- Real-Time Metrics Output -->
+          <div class="grid grid-cols-2 gap-2 text-center text-[10px] sm:text-[11px] font-display bg-slate-900/40 border border-indigo-950 p-2.5 rounded-lg">
+            <div>
+              <span class="text-slate-400 block" id="metBsr">Bench Strength Ratio (BSR)</span>
+              <span id="outBsr" class="text-xs sm:text-sm font-bold text-amber-500">0.0 / 2.0 Target</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block" id="metRoi">Return on Investment (ROI)</span>
+              <span id="outRoi" class="text-xs sm:text-sm font-bold text-cyberCyan">0%</span>
+            </div>
+          </div>
+
+          <!-- KNOWLEDGE EXPANDER -->
+          <details class="bg-slate-900 border border-indigo-950 rounded-lg group transition-colors duration-150">
+            <summary class="list-none flex justify-between items-center p-3 cursor-pointer select-none">
+              <span class="text-xs font-display font-semibold text-emerald-400 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.754 18.477 18.168 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span id="card4ExpTitle">Theoretical Deep-Dive (BSR & ROI)</span>
+              </span>
+              <span class="transition-transform duration-200 group-open:rotate-180 text-emerald-400">▼</span>
+            </summary>
+            <div class="p-3 border-t border-indigo-950 text-xs text-slate-300 space-y-2 leading-relaxed">
+              <p id="card4ExpText1">
+                <strong>Bench Strength Ratio (BSR)</strong> determines how resilient an organization is to sudden executive or leadership attrition.
+              </p>
+              <div class="bg-black/40 p-2.5 rounded border border-indigo-950/80 font-mono text-[10px] text-yellow-400 space-y-1">
+                <p>BSR = (Fully Qualified Ready Successors) / (Critical Leadership Roles)</p>
+                <p>Training ROI (%) = [(Net Financial Benefits - Total Training Costs) / Total Training Costs] * 100</p>
+              </div>
+              <p id="card4ExpText2">
+                According to standard human resource planning benchmarks, organizations should target a <strong>BSR &ge; 2.0</strong> to mitigate operational risk, while ensuring training capital returns substantial financial value.
+              </p>
+            </div>
+          </details>
+
+          <!-- Master Badge Status panel at card footer -->
+          <div class="mt-2 p-3 bg-slate-900/90 border border-amber-500/20 rounded-lg space-y-1.5">
+            <h4 id="badgePanelTitle" class="text-[10px] font-display font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"></path>
+              </svg>
+              OBISL PROFESSIONAL BADGE STATUS
+            </h4>
+            <p id="badgePanelNote" class="text-[9px] text-slate-300 leading-relaxed">
+              Unlock your professional fellowship badge signed by Michael Ranuka Gamage by completing all 4 interactive simulators. Track your completion above.
+            </p>
+          </div>
+        </div>
+
+        <!-- Claim Master Certification Button -->
+        <button id="step3Action" onclick="claimMasterCert()" class="w-full mt-4 bg-gradient-to-r from-yellow-500 via-amber-500 to-emerald-500 opacity-50 cursor-not-allowed text-slate-900 font-display font-bold py-3 text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2" disabled>
+          <svg class="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+          <span id="card4Btn">CLAIM MASTER CERTIFICATE →</span>
+        </button>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- ==================== 5. STICKY INTELLECTUAL PROPERTY FOOTER (6vh) ==================== -->
+  <footer class="h-[6vh] min-h-[40px] bg-slate-950 border-t border-indigo-950 px-4 flex items-center justify-center text-center text-[9px] sm:text-[10px] text-slate-400 font-display tracking-wide z-50">
+    <span id="footerText">OBISL Campus | Concept by Michael Ranuka Gamage | CHRM - Module 6</span>
+  </footer>
+
+
+  <!-- ==================== 6. MASTER CERTIFICATE MODAL ==================== -->
+  <div id="certModal" class="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+    <div class="max-w-md w-full bg-gradient-to-b from-[#111827] to-[#070b1a] border-2 border-yellow-500 rounded-2xl p-6 shadow-2xl relative text-center space-y-4 animate-scaleUp">
+      
+      <!-- Close Button -->
+      <button onclick="closeCertModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white font-bold font-mono text-lg transition-colors">✕</button>
+
+      <!-- Royal Crest Badge Icon -->
+      <div class="mx-auto w-14 h-14 rounded-full bg-gradient-to-r from-yellow-500 via-amber-500 to-emerald-500 p-0.5 animate-bounce shadow-lg shadow-yellow-500/20">
+        <div class="bg-slate-950 rounded-full w-full h-full flex items-center justify-center text-yellow-400 font-serif font-extrabold text-xl">
+          M6
+        </div>
+      </div>
+
+      <div class="space-y-0.5">
+        <h3 class="font-serif font-extrabold text-lg tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-300" id="modalTitle">
+          OBISL CAMPUS
+        </h3>
+        <p class="text-[9px] text-emerald-400 font-display tracking-widest uppercase font-bold" id="modalSub">
+          EXECUTIVE HR CREDENTIAL
+        </p>
+      </div>
+
+      <!-- Formal Professional Certificate Body -->
+      <div class="border border-indigo-900/60 bg-[#0d132a]/90 p-4 rounded-lg space-y-3.5 text-left">
+        <p class="text-[10px] text-slate-300 leading-relaxed text-center italic" id="modalIntro">
+          This verifies that the student has completed all rigorous simulators and demonstrated complete master-level competence in
+        </p>
+        
+        <div class="space-y-1 text-center">
+          <h4 class="font-display font-bold text-xs sm:text-sm text-cyberCyan leading-snug" id="modalModule">
+            MODULE 6: STRATEGIC TRAINING & DEVELOPMENT
+          </h4>
+          <p class="text-[9px] text-slate-400 font-semibold" id="modalProgram">
+            Certificate in Human Resource Management Skills (CHRM)
+          </p>
+        </div>
+
+        <div class="h-px bg-indigo-950 my-2"></div>
+
+        <!-- Academic Director Signature Block -->
+        <div class="text-center pt-1">
+          <p class="font-serif italic text-xs text-amber-300" id="modalSigName">Michael Ranuka Gamage</p>
+          <p class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider" id="modalSigTitle">Pedagogical Architect & CHRO | OBISL Campus</p>
+        </div>
+      </div>
+
+      <div class="flex justify-center pt-1">
+        <button onclick="closeCertModal()" class="px-5 py-2 bg-indigo-950/50 hover:bg-indigo-900 text-[11px] font-display font-semibold rounded border border-indigo-900 text-slate-200 transition-all" id="modalCloseBtn">
+          Close Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================================== -->
+  <!-- ==================== HIGH-PRECISION TECHNICAL JAVASCRIPT ==================== -->
+  <!-- ============================================================================== -->
+  <script>
+    // ==================== 1. GLOBAL STATE & COORDINATES ====================
+    let currentStep = 0;
+    let isEnglish = true;
+    let stepCompleted = [false, false, false, false];
+    let gameStarted = [false, false, false, false];
+
+    // Pointer details
+    let mouseX = 0;
+    let mouseY = 0;
+    let isMouseDown = false;
+    let draggedElement = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    // Canvas visuals
+    let canvas = null;
+    let ctx = null;
+    let animationId = null;
+    let particles = [];
+
+    // Step 1: Capability Rift Diagnostic Model
+    let step1Nodes = [];
+    const cantDoTarget = { x: 0, y: 0, r: 0, labelEN: "CAN'T DO (Capability)", labelSI: "හැකියාවක් නොමැති (කුසලතා)" };
+    const wontDoTarget = { x: 0, y: 0, r: 0, labelEN: "WON'T DO (Motivation)", labelSI: "අභිප්‍රේරණයක් නොමැති (පද්ධති)" };
+
+    // Step 2: Training Methodologies (Scale and Slider configurations)
+    let ojtHours = 50;
+    let offjtHours = 50;
+    let methodologyScoreValid = false;
+
+    // Step 3: Kirkpatrick Pipeline
+    let step3Blocks = [];
+    let step3Sockets = [];
+
+    // Step 4: Succession Maps & ROI
+    let step4Successors = [];
+    let step4Roles = [];
+    let roiCost = 4000;
+    let roiBenefits = 12000;
+
+    // Fisher-Yates Shuffle Utility
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // High performance text wrapping utility in Canvas
+    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      let lines = [];
+      for (let n = 0; n < words.length; n++) {
+        let testLine = line + words[n] + ' ';
+        let metrics = ctx.measureText(testLine);
+        let testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          lines.push(line);
+          line = words[n] + ' ';
+        } else {
+          line = testLine;
+        }
+      }
+      lines.push(line);
+      
+      const totalHeight = lines.length * lineHeight;
+      let startY = y - (totalHeight / 2) + (lineHeight / 2);
+      for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i].trim(), x, startY + (i * lineHeight));
+      }
+    }
+
+    // High precision coordinate tracking engine (Desktop + Mobile)
+    function updateCoords(e) {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      
+      if (e.touches && e.touches.length > 0) {
+        mouseX = (e.touches[0].clientX - rect.left) * (canvas.width / rect.width);
+        mouseY = (e.touches[0].clientY - rect.top) * (canvas.height / rect.height);
+      } 
+      else if (e.changedTouches && e.changedTouches.length > 0) {
+        mouseX = (e.changedTouches[0].clientX - rect.left) * (canvas.width / rect.width);
+        mouseY = (e.changedTouches[0].clientY - rect.top) * (canvas.height / rect.height);
+      }
+      else if (e.clientX !== undefined) {
+        mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+        mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+      }
+    }
+
+    // ==================== 2. DEEP-DIVE BILINGUAL TRANSLATION MATRIX ====================
+    const translations = {
+      en: {
+        brandTitle: "OBISL GAMIFIED - MODULE 6: TRAINING & DEVELOPMENT",
+        badgeLockedTip: "Mastery Badge: Locked. Complete all 4 simulators to unlock your certification!",
+        badgeUnlockedTip: "Mastery Badge: Unlocked! Click to view your Certificate.",
+        tabTna: "1. TNA",
+        tabOjt: "2. OJT/OFF",
+        tabEval: "3. EVAL",
+        tabRoi: "4. ROI/BSR",
+        step1Title: "1. The Capability Rift",
+        step1Sub: "TNA DIAGNOSTICS",
+        step1Badge: "Can't Do vs Won't Do",
+        step1Desc: "Evaluate the scenario on each glowing capsule. Distinguish competency gaps ('Can't Do') from motivational/environmental barriers ('Won't Do'). Drag the capsule to the correct target zone.",
+        step1Progress: "Classification Progress:",
+        step1Unlocked: "Simulation active. Drag issues to the correct bins.",
+        step1DetailsTitle: "Theoretical Deep-Dive (TNA)",
+        step1DetailsText1: "Training is often misapplied to problems of motivation. Standard HR research asserts that training only bridges Capability Deficits ('Can't Do').",
+        step1DetailsText2: "Differentiating performance issues using empirical diagnostic assessments protects the training budget from being wasted on environmental or structural barriers.",
+        btnStep1: "CONTINUE TO METHODOLOGIES →",
+        step2Title: "2. Strategic Balancing Act",
+        step2Sub: "METHODOLOGY MIX",
+        step2Badge: "OJT vs Off-JT",
+        step2Desc: "Allocate training hours between On-the-Job (OJT) and Off-the-Job (Off-JT). Balance practical skill output and theoretical knowledge within the $5,000 budget.",
+        step2Progress: "Calibration Requirements:",
+        step2LabelOjt: "On-the-Job Hours (OJT):",
+        step2LabelOff: "Off-the-Job Hours (Off-JT):",
+        step2Practical: "Practical Skill",
+        step2Theory: "Theory Score",
+        step2Cost: "Total Cost",
+        step2DetailsTitle: "OJT vs Off-JT Dynamics",
+        step2DetailsText1: "OJT features highly contextualized hands-on shadowing (buddy system) with high transfer rate but low theoretical structure. Off-JT offers dedicated environments for structured conceptual models.",
+        step2DetailsText2: "Finding the optimal mix maximizes retention while satisfying corporate resource limitations and capital constraints.",
+        btnStep2: "CONTINUE TO EVALUATION →",
+        step3Title: "3. Kirkpatrick's Pipeline",
+        step3Sub: "EVALUATION METRICS",
+        step3Badge: "4 Levels of Evaluation",
+        step3Desc: "A systematic feedback architecture is critical. Drag Kirkpatrick's evaluation techniques/mechanisms to their chronological pipeline sockets, ascending from feedback reaction to organizational results.",
+        step3Progress: "Pipeline Order:",
+        step3DetailsTitle: "Theoretical Deep-Dive (Kirkpatrick Model)",
+        step3DetailsText1: "Donald Kirkpatrick's framework serves as the gold-standard HR architecture for verifying talent capability growth across progressive hurdles.",
+        step3DetailsText2: "Level 1 measures subjective satisfaction (Reaction). Level 2 checks test results (Learning). Level 3 audits workplace application (Behavior). Level 4 measures ROI & business KPIs (Results).",
+        btnStep3: "CONTINUE TO TALENT METRICS →",
+        step4Title: "4. Bench Strength & ROI",
+        step4Sub: "TALENT FORECASTING",
+        step4Badge: "BSR >= 2.0 & ROI >= 150%",
+        step4Desc: "Build organizational defense. First, drag and place 10 successors across 5 critical leadership roles to achieve BSR >= 2.0. Second, optimize costs and benefits to hit ROI >= 150%.",
+        step4Progress: "Operational Bench Readiness:",
+        step4LabelCost: "Total Training Costs ($):",
+        step4LabelBenefit: "Net Financial Benefits ($):",
+        step4Bsr: "Bench Strength Ratio",
+        step4Roi: "Return on Investment (ROI)",
+        step4DetailsTitle: "Theoretical Deep-Dive (BSR & ROI)",
+        step4DetailsText1: "Bench Strength Ratio (BSR) measures the count of ready successors per critical leadership node. A target of 2.0 ensures seamless continuity during unexpected executive turnover.",
+        step4DetailsText2: "ROI quantifies training as an asset class. Net benefits are calculated by measuring post-training efficiency gains minus direct implementation overhead.",
+        btnStep4: "CLAIM MASTER CERTIFICATE →",
+        briefingTitle: "SIMULATION BRIEFING",
+        startBtnText: "START SIMULATOR",
+        briefingTna: "Evaluate performance bottlenecks at Nexus Financial. Identify the capability issues ('Can't Do') vs systemic motivational issues ('Won't Do') across 6 challenging real-world scenarios. Target: 100% correct.",
+        briefingOjt: "Balance the scales of professional growth. Calibrate OJT and Off-JT hours to achieve at least 80% Practical Skill and 80% Theory Score. Budget limit: $5,000.",
+        briefingEval: "Arrange the Kirkpatrick feedback pipeline. Analyze the real-world evaluation metrics and place them into the correct corresponding chronological slots: Level 1 through Level 4.",
+        briefingRoi: "Secure leadership continuity and maximize training returns. Map 10 successors to the 5 executive nodes (BSR >= 2.0) and optimize cost/benefit sliders to hit ROI >= 150%.",
+        goalCompleted: "GOAL COMPLETED!",
+        tnaGoalCompleted: "TNA diagnostics completed. Capability vs Motivation fully classified!",
+        ojtGoalCompleted: "Methodologies successfully balanced within strategic parameters!",
+        evalGoalCompleted: "Evaluation pipeline verified. All 4 assessment levels sequenced!",
+        roiGoalCompleted: "Succession plan secured (BSR >= 2.0) and ROI is optimized >= 150%!",
+        roleCEO: "CEO Node",
+        roleCHRO: "CHRO Node",
+        roleCFO: "CFO Node",
+        roleCTO: "CTO Node",
+        roleCOO: "COO Node",
+        level1Name: "1. Reaction",
+        level2Name: "2. Learning",
+        level3Name: "3. Behavior",
+        level4Name: "4. Results",
+        canvasOverlay1: "Task: Sort the Performance Gaps",
+        canvasOverlay2: "Task: Calibrate Training Hours",
+        canvasOverlay3: "Task: Build the Evaluation Pipeline",
+        canvasOverlay4: "Task: Map Successors & Optimize ROI",
+        certTitle: "OBISL CAMPUS",
+        certSub: "EXECUTIVE HR CREDENTIAL",
+        certIntro: "This verifies that the student has completed all rigorous simulators and demonstrated complete master-level competence in",
+        certModule: "MODULE 6: STRATEGIC TRAINING & DEVELOPMENT",
+        certProgram: "Certificate in Human Resource Management Skills (CHRM)",
+        certSignName: "Michael Ranuka Gamage",
+        certSignTitle: "Pedagogical Architect & CHRO | OBISL Campus",
+        certCloseBtn: "Close Dashboard",
+        badgePanelTitle: "OBISL PROFESSIONAL BADGE STATUS",
+        badgePanelNote: "Unlock your professional fellowship badge signed by Michael Ranuka Gamage by completing all 4 interactive simulators. Track your completion above."
+      },
+      si: {
+        brandTitle: "OBISL ක්‍රීඩාමය ඉගෙනුම - මොඩියුලය 6: පුහුණුව සහ සංවර්ධනය",
+        badgeLockedTip: "වෘත්තීය ලාංඡනය: අගුළු දමා ඇත. සහතිකය ලබා ගැනීමට සිමියුලේටර් 4ම සම්පූර්ණ කරන්න!",
+        badgeUnlockedTip: "වෘත්තීය ලාංඡනය: විවෘතයි! සහතිකය බැලීමට ක්ලික් කරන්න.",
+        tabTna: "1. TNA විශ්ලේෂණය",
+        tabOjt: "2. OJT/OFF ක්‍රමවේද",
+        tabEval: "3. ඇගයීම",
+        tabRoi: "4. ROI/BSR දර්ශක",
+        step1Title: "1. හැකියාවන් සහ අභිප්‍රේරණයේ පරතරය",
+        step1Sub: "පුහුණු අවශ්‍යතා විශ්ලේෂණය (TNA)",
+        step1Badge: "Can't Do vs Won't Do",
+        step1Desc: "එක් එක් කාඩ්පතෙහි ඇති ආයතනික ගැටළුව හොඳින් කියවා බලන්න. එය කුසලතා හිඟයක් ද ('Can't Do') නැතහොත් පද්ධතිමය අභිප්‍රේරණ ගැටළුවක් ද ('Won't Do') කියා තීරණය කර අදාළ කලාපයට ඇද දමන්න.",
+        step1Progress: "වර්ගීකරණයේ ප්‍රගතිය:",
+        step1Unlocked: "සිමියුලේටරය ක්‍රියාත්මකයි. ගැටළු නිවැරදි ස්ථානයට ඇද දමන්න.",
+        step1DetailsTitle: "න්‍යායාත්මක ගැඹුරු විශ්ලේෂණය (TNA)",
+        step1DetailsText1: "අභිප්‍රේරණ ගැටළු සඳහා පුහුණුව ලබාදීම පොදු වැරැද්දකි. ප්‍රමිතිගත මානව සම්පත් සංකල්පයන්ට අනුව පුහුණුව මඟින් විසඳිය හැක්කේ හැකියාවන් පිළිබඳ ගැටළු ('Can't Do') පමණි.",
+        step1DetailsText2: "දත්ත මත පදනම් වූ විධිමත් පරීක්ෂණ මඟින් කාර්යසාධන ගැටළු වර්ගීකරණය කිරීමෙන් අනවශ්‍ය පුහුණු වියදම් සම්පූර්ණයෙන්ම වළක්වා ගත හැකිය.",
+        btnStep1: "පුහුණු ක්‍රමවේද වෙත යන්න →",
+        step2Title: "2. උපායමාර්ගික සමතුලිතතාවය",
+        step2Sub: "පුහුණු ක්‍රමවේද සංකලනය",
+        step2Badge: "OJT සහ Off-JT",
+        step2Desc: "වැඩබිම් පුහුණු (OJT) සහ බාහිර පුහුණු (Off-JT) පැය නිවැරදිව සකසන්න. $5,000 පිරිවැය සීමාව ඇතුළත ප්‍රායෝගික කුසලතා සහ න්‍යායාත්මක දැනුම එකවර 80% ඉක්මවන්න.",
+        step2Progress: "සමතුලිතතා අවශ්‍යතා:",
+        step2LabelOjt: "වැඩබිම් පුහුණු පැය (OJT):",
+        step2LabelOff: "බාහිර පුහුණු පැය (Off-JT):",
+        step2Practical: "ප්‍රායෝගික කුසලතාව",
+        step2Theory: "න්‍යායාත්මක දැනුම",
+        step2Cost: "මුළු පිරිවැය",
+        step2DetailsTitle: "OJT සහ Off-JT ක්‍රියාකාරිත්වය",
+        step2DetailsText1: "වැඩබිම් පුහුණුව (OJT) මඟින් සේවා ස්ථානයේදීම ප්‍රායෝගික කුසලතා ශීඝ්‍රයෙන් වර්ධනය වන අතර ඒ සඳහා ජ්‍යෙෂ්ඨයින්ගේ සහාය (Buddy system) අවශ්‍ය වේ. බාහිර පුහුණුව (Off-JT) මඟින් සන්සුන්ව න්‍යායාත්මක කරුණු අවබෝධ කරගත හැක.",
+        step2DetailsText2: "නිවැරදි පුහුණු සංකලනය මඟින් සේවකයින්ගේ රඳවා ගැනීම උපරිම වන අතර ආයතනික සම්පත් නාස්තිය අවම වේ.",
+        btnStep2: "ඇගයීම් මට්ටම් වෙත යන්න →",
+        step3Title: "3. කර්ක්පැට්රික්ගේ ඇගයීම් මට්ටම්",
+        step3Sub: "ඇගයීම් දර්ශක",
+        step3Badge: "ඇගයීම් මට්ටම් 4",
+        step3Desc: "පුහුණුවක සාර්ථකත්වය මැනීම සඳහා ක්‍රමානුකූල ඇගයීමක් අවශ්‍ය වේ. විවිධ ඇගයීම් ක්‍රමවේද සහ දර්ශක ඒවාට ගැලපෙන කර්ක්පැට්රික් ඇගයීම් මට්ටම් 4 නිවැරදිව ඇද තබන්න.",
+        step3Progress: "කාලරාමුවේ අනුපිළිවෙල:",
+        step3DetailsTitle: "න්‍යායාත්මක ගැඹුරු විශ්ලේෂණය (Kirkpatrick Model)",
+        step3DetailsText1: "ඩොනල්ඩ් කර්ක්පැට්රික්ගේ ආකෘතිය යනු මානව ප්‍රාග්ධන සංවර්ධනය සහ පුහුණු ඇගයීම සඳහා ලොව පිළිගත් ප්‍රමුඛතම රාමුවයි.",
+        step3DetailsText2: "මට්ටම 1 මඟින් ප්‍රතිචාරය (Reaction), මට්ටම 2 මඟින් ඉගෙනුම (Learning), මට්ටම 3 මඟින් හැසිරීම (Behavior) සහ මට්ටම 4 මඟින් සැබෑ ව්‍යාපාරික ප්‍රතිඵල (Results) මනිනු ලබයි.",
+        btnStep3: "අනුප්‍රාප්තික සැලසුම් වෙත යන්න →",
+        step4Title: "4. අනුප්‍රාප්තික සහ ආයෝජන ප්‍රතිලාභ (ROI)",
+        step4Sub: "මානව ප්‍රාග්ධන පුරෝකථනය",
+        step4Badge: "BSR >= 2.0 සහ ROI >= 150%",
+        step4Desc: "ආයතන ආරක්ෂාව ශක්තිමත් කරන්න. ප්‍රධාන තනතුරු 5 සඳහා අනුප්‍රාප්තිකයින් 10 දෙනාම ඇද තබා BSR >= 2.0 ක් ලබා ගන්න. ඉන්පසු මූල්‍ය දර්ශක සකසා ROI >= 150% ක් ලබා ගන්න.",
+        step4Progress: "අනුප්‍රාප්තික සූදානම:",
+        step4LabelCost: "මුළු පුහුණු පිරිවැය ($):",
+        step4LabelBenefit: "ලැබුණු මූල්‍ය ප්‍රතිලාභ ($):",
+        step4Bsr: "අනුප්‍රාප්තික අනුපාතය (BSR)",
+        step4Roi: "ආයෝජන ප්‍රතිලාභය (ROI)",
+        step4DetailsTitle: "න්‍යායාත්මක ගැඹුරු විශ්ලේෂණය (BSR සහ ROI)",
+        step4DetailsText1: "අනුප්‍රාප්තික ශක්ති අනුපාතය (BSR) මඟින් ප්‍රධාන තනතුරක් සඳහා සූදානම්ව සිටින සේවකයින් ගණන මනිනු ලබයි. BSR 2.0 ක් පවත්වා ගැනීමෙන් ආයතන අවදානම් අවම වේ.",
+        step4DetailsText2: "ආයෝජන ප්‍රතිලාභය (ROI) මඟින් පුහුණුව සඳහා වැය කළ මුදලට සාපේක්ෂව ලැබුණු සමස්ත මූල්‍යමය හෝ ඵලදායිතා වාසි ප්‍රතිශතයක් ලෙස මනිනු ලබයි.",
+        btnStep4: "වෘත්තීය සහතිකය ලබා ගන්න →",
+        briefingTitle: "සිමියුලේටර් උපදෙස්",
+        startBtnText: "සිමියුලේටරය අරඹන්න",
+        briefingTna: "Nexus Financial ආයතනයේ කාර්යසාධන ගැටළු විශ්ලේෂණය කරන්න. සංකීර්ණ ආයතනික ගැටළු 6 හොඳින් කියවා බලා ඒවා හැකියාවන්ගේ හිඟතා (Can't Do) සහ අභිප්‍රේරණ ගැටළු (Won't Do) ලෙස වෙන් කරන්න.",
+        briefingOjt: "පුහුණු ක්‍රමවේදවල සමතුලිතතාවය සකසන්න. $5,000 අයවැය සීමාව ඇතුළත ප්‍රායෝගික කුසලතා 80% සහ න්‍යාය දැනුම 80% ලැබෙන පරිදි OJT සහ Off-JT පැය සකසන්න.",
+        briefingEval: "කර්ක්පැට්රික් ප්‍රතිපෝෂණ පද්ධතිය සකසන්න. ප්‍රායෝගික ඇගයීම් දර්ශකයන් හොඳින් විශ්ලේෂණය කර ඒවා මට්ටම 1 සිට මට්ටම 4 දක්වා නිවැරදිව ස්ථානගත කරන්න.",
+        briefingRoi: "අනුප්‍රාප්තික සැලසුම් ශක්තිමත් කර ROI උපරිම කරන්න. ප්‍රධාන තනතුරු 5 සඳහා අනුප්‍රාප්තිකයින් 10 දෙනා ඇද තබා (BSR >= 2.0) සහ ROI >= 150% වන සේ ස්ලයිඩර් සකසන්න.",
+        goalCompleted: "ඉලක්කය සාර්ථකයි!",
+        tnaGoalCompleted: "TNA වර්ගීකරණය සාර්ථකව නිම කරන ලදී! හැකියාවන් සහ අභිප්‍රේරණ ගැටළු වෙන් කරන ලදී.",
+        ojtGoalCompleted: "උපායමාර්ගික පුහුණු පැය සහ අයවැය සාර්ථකව සමබර කරන ලදී!",
+        evalGoalCompleted: "ඇගයීම් කාලරාමුව තහවුරු කරන ලදී! මට්ටම් 4ම නිවැරදිව පිහිටුවා ඇත.",
+        roiGoalCompleted: "අනුප්‍රාප්තික සැලසුම් සූදානම් (BSR >= 2.0) සහ පුහුණු ROI 150% ඉක්මවා ඇත!",
+        roleCEO: "ප්‍රධාන විධායක (CEO)",
+        roleCHRO: "මානව සම්පත් ප්‍රධාන (CHRO)",
+        roleCFO: "මූල්‍ය ප්‍රධානී (CFO)",
+        roleCTO: "තාක්ෂණික ප්‍රධානී (CTO)",
+        roleCOO: "මෙහෙයුම් ප්‍රධානී (COO)",
+        level1Name: "1. ප්‍රතිචාරය (Reaction)",
+        level2Name: "2. ඉගෙනුම (Learning)",
+        level3Name: "3. හැසිරීම (Behavior)",
+        level4Name: "4. ප්‍රතිඵල (Results)",
+        canvasOverlay1: "කාර්යය: කාර්යසාධන ගැටළු වර්ග කරන්න",
+        canvasOverlay2: "කාර්යය: පුහුණු පැය ප්‍රමාණයන් සමබර කරන්න",
+        canvasOverlay3: "කාර්යය: ඇගයීම් කාලරාමුව සකසන්න",
+        canvasOverlay4: "කාර්යය: අනුප්‍රාප්තිකයින් සහ ROI සකසන්න",
+        certTitle: "OBISL කැම්පස්",
+        certSub: "වෘත්තීය මානව සම්පත් සහතිකය",
+        certIntro: "සිසුවා විසින් සියලුම ප්‍රායෝගික සිමියුලේටර් සාර්ථකව නිම කර පහත මොඩියුලයේ විශිෂ්ට නිපුණත්වයක් ලබා ඇති බව සහතික කරනු ලැබේ:",
+        certModule: "මොඩියුලය 6: උපායමාර්ගික පුහුණුව සහ සංවර්ධනය",
+        certProgram: "Certificate in Human Resource Management Skills (CHRM)",
+        certSignName: "මයිකල් රනුක ගමගේ",
+        certSignTitle: "ප්‍රධාන මානව සම්පත් නිලධාරී සහ විශිෂ්ට අධ්‍යාපන සැලසුම්කරු | OBISL Campus",
+        certCloseBtn: "පෙරදසුන වසන්න",
+        badgePanelTitle: "OBISL වෘත්තීය ලාංඡන තත්ත්වය",
+        badgePanelNote: "මයිකල් රනුක ගමගේ මහතා අත්සන් කරන ලද වෘත්තීය සහතිකය ලබා ගැනීම සඳහා සිමියුලේටර් 4ම සාර්ථකව නිම කරන්න. ඔබගේ ප්‍රගතිය ඉහතින් නිරීක්ෂණය කරන්න."
+      }
+    };
+
+    function toggleLanguage() {
+      isEnglish = !isEnglish;
+      document.getElementById("langToggle").innerText = isEnglish ? "ENG | සිංහල" : "සිංහල | ENG";
+      applyTranslations();
+      recalculateCurrentStepLabels();
+    }
+
+    function applyTranslations() {
+      const dict = isEnglish ? translations.en : translations.si;
+
+      // Header Elements
+      document.getElementById("headerBrand").innerText = dict.brandTitle;
+      document.getElementById("badgeTooltip").innerText = stepCompleted.every(Boolean) ? dict.badgeUnlockedTip : dict.badgeLockedTip;
+
+      // Slide navigation tabs
+      document.getElementById("navTab0").innerText = dict.tabTna;
+      document.getElementById("navTab1").innerText = dict.tabOjt;
+      document.getElementById("navTab2").innerText = dict.tabEval;
+      document.getElementById("navTab3").innerText = dict.tabRoi;
+
+      // Footer General Intellectual Elements
+      document.getElementById("footerText").innerText = dict.footer || ("OBISL Campus | Concept by Michael Ranuka Gamage | CHRM - Module 6");
+      
+      // Certificate Modal Contents
+      document.getElementById("modalTitle").innerText = dict.certTitle;
+      document.getElementById("modalSub").innerText = dict.certSub;
+      document.getElementById("modalIntro").innerText = dict.certIntro;
+      document.getElementById("modalModule").innerText = dict.certModule;
+      document.getElementById("modalProgram").innerText = dict.certProgram;
+      document.getElementById("modalSigName").innerText = dict.certSignName;
+      document.getElementById("modalSigTitle").innerText = dict.certSignTitle;
+      document.getElementById("modalCloseBtn").innerText = dict.certCloseBtn;
+
+      // Card 1: TNA
+      document.getElementById("card1Sub").innerText = dict.card1Sub;
+      document.getElementById("card1Title").innerText = dict.step1Title;
+      document.getElementById("card1Badge").innerText = dict.step1Badge;
+      document.getElementById("card1Desc").innerText = dict.step1Desc;
+      document.getElementById("card1TargetLabel").innerText = dict.step1Progress;
+      document.getElementById("card1ExpTitle").innerText = dict.step1DetailsTitle;
+      document.getElementById("card1ExpText1").innerText = dict.step1DetailsText1;
+      document.getElementById("card1ExpText2").innerText = dict.step1DetailsText2;
+      document.getElementById("card1Btn").innerText = dict.btnStep1;
+
+      // Card 2: Methodologies
+      document.getElementById("card2Sub").innerText = dict.card2Sub;
+      document.getElementById("card2Title").innerText = dict.step2Title;
+      document.getElementById("card2Badge").innerText = dict.step2Badge;
+      document.getElementById("card2Desc").innerText = dict.step2Desc;
+      document.getElementById("slider1Label").innerText = dict.step2LabelOjt;
+      document.getElementById("slider2Label").innerText = dict.step2LabelOff;
+      document.getElementById("metPrac").innerText = dict.step2Practical;
+      document.getElementById("metTheo").innerText = dict.step2Theory;
+      document.getElementById("metCost").innerText = dict.step2Cost;
+      document.getElementById("card2ExpTitle").innerText = dict.step2DetailsTitle;
+      document.getElementById("card2ExpText1").innerText = dict.step2DetailsText1;
+      document.getElementById("card2ExpText2").innerText = dict.step2DetailsText2;
+      document.getElementById("card2Btn").innerText = dict.btnStep1; // reuse standard style
+
+      // Card 3: Kirkpatrick Pipeline
+      document.getElementById("card3Sub").innerText = dict.card3Sub;
+      document.getElementById("card3Title").innerText = dict.step3Title;
+      document.getElementById("card3Badge").innerText = dict.step3Badge;
+      document.getElementById("card3Desc").innerText = dict.step3Desc;
+      document.getElementById("card3TargetLabel").innerText = dict.step3Progress;
+      document.getElementById("card3ExpTitle").innerText = dict.step3DetailsTitle;
+      document.getElementById("card3ExpText1").innerText = dict.step3DetailsText1;
+      document.getElementById("card3ExpText2").innerText = dict.step3DetailsText2;
+      document.getElementById("card3Btn").innerText = dict.btnStep3;
+
+      // Card 4: ROI / Bench Strength
+      document.getElementById("card4Sub").innerText = dict.card4Sub;
+      document.getElementById("card4Title").innerText = dict.step4Title;
+      document.getElementById("card4Badge").innerText = dict.step4Badge;
+      document.getElementById("card4Desc").innerText = dict.step4Desc;
+      document.getElementById("slider3Label").innerText = dict.step4LabelCost;
+      document.getElementById("slider4Label").innerText = dict.step4LabelBenefit;
+      document.getElementById("metBsr").innerText = dict.step4Bsr;
+      document.getElementById("metRoi").innerText = dict.step4Roi;
+      document.getElementById("card4ExpTitle").innerText = dict.step4DetailsTitle;
+      document.getElementById("card4ExpText1").innerText = dict.step4DetailsText1;
+      document.getElementById("card4ExpText2").innerText = dict.step4DetailsText2;
+      document.getElementById("card4Btn").innerText = dict.btnStep4;
+      document.getElementById("badgePanelTitle").innerText = dict.badgePanelTitle;
+      document.getElementById("badgePanelNote").innerText = dict.badgePanelNote;
+
+      // Sync active briefing texts cleanly
+      updateBriefingOverlay();
+    }
+
+    function recalculateCurrentStepLabels() {
+      const dict = isEnglish ? translations.en : translations.si;
+      const overlayText = document.getElementById("canvasOverlayMission");
+      if (currentStep === 0) overlayText.innerText = dict.canvasOverlay1;
+      else if (currentStep === 1) overlayText.innerText = dict.canvasOverlay2;
+      else if (currentStep === 2) overlayText.innerText = dict.canvasOverlay3;
+      else if (currentStep === 3) overlayText.innerText = dict.canvasOverlay4;
+
+      // Update state updates dynamically
+      updateStep1UI();
+      updateMethodologySliders();
+      updateStep3UI();
+      updateRoiSliders();
+    }
+
+
+    // ==================== 3. INITIALIZATION & LAYOUT CONFIGURATION ====================
+    window.onload = function() {
+      canvas = document.getElementById("appCanvas");
+      ctx = canvas.getContext("2d");
+
+      // Auto size updates
+      resizeCanvas();
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+      });
+
+      // Pointer interactions
+      setupTouchOverrides();
+
+      // Initiate game objects
+      initStep1Data();
+      initStep3Data();
+      initStep4Data();
+
+      // Trigger translated contents
+      applyTranslations();
+      recalculateCurrentStepLabels();
+
+      // Start recursive loop
+      requestAnimationFrame(gameLoop);
+    };
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      repositionStep1Targets();
+      repositionStep3Components();
+      repositionStep4Components();
+    }
+
+    function setupTouchOverrides() {
+      // Desktop mouse bindings
+      canvas.addEventListener("mousedown", function(e) {
+        updateCoords(e);
+        onPointerDown(e);
+      });
+      canvas.addEventListener("mousemove", function(e) {
+        updateCoords(e);
+        onPointerMove(e);
+      });
+      canvas.addEventListener("mouseup", function(e) {
+        onPointerUp(e);
+      });
+
+      // Mobile touch bindings (with active preventDefault tracking to block ghost-triggers)
+      canvas.addEventListener("touchstart", function(e) {
+        e.preventDefault();
+        if (e.touches.length > 0) {
+          updateCoords(e);
+          onPointerDown(e);
+        }
+      }, { passive: false });
+
+      canvas.addEventListener("touchmove", function(e) {
+        e.preventDefault();
+        if (e.touches.length > 0) {
+          updateCoords(e);
+          onPointerMove(e);
+        }
+      }, { passive: false });
+
+      canvas.addEventListener("touchend", function(e) {
+        e.preventDefault();
+        updateCoords(e);
+        onPointerUp(e);
+      }, { passive: false });
+    }
+
+
+    // ==================== 4. APP FLOW & OVERLAY CONTROLLERS ====================
+    function switchStep(stepIndex) {
+      currentStep = stepIndex;
+
+      // Update navbar styling
+      for (let i = 0; i < 4; i++) {
+        const tab = document.getElementById(`navTab${i}`);
+        if (i === stepIndex) {
+          tab.className = "flex-1 py-2 text-center border-b-2 border-cyberCyan text-cyberCyan font-display uppercase tracking-wider transition-all";
+        } else {
+          tab.className = "flex-1 py-2 text-center border-b-2 border-transparent text-slate-400 font-display uppercase tracking-wider transition-all";
+        }
+        
+        // Hide/Show Card scrollers
+        const card = document.getElementById(`stepCard${i}`);
+        if (i === stepIndex) {
+          card.classList.remove("hidden");
+        } else {
+          card.classList.add("hidden");
+        }
+      }
+
+      // Sync briefing configurations & goal status
+      recalculateCurrentStepLabels();
+      updateBriefingOverlay();
+      checkSuccessOverlayState();
+    }
+
+    function nextStep() {
+      if (currentStep < 3) {
+        switchStep(currentStep + 1);
+      }
+    }
+
+    function updateBriefingOverlay() {
+      const overlay = document.getElementById("briefingOverlay");
+      const startBtn = document.getElementById("startGameBtn");
+      const title = document.getElementById("briefingTitle");
+      const text = document.getElementById("briefingText");
+      const dict = isEnglish ? translations.en : translations.si;
+
+      if (gameStarted[currentStep]) {
+        overlay.classList.add("hidden");
+      } else {
+        overlay.classList.remove("hidden");
+        startBtn.innerText = dict.startBtnText;
+        
+        if (currentStep === 0) {
+          title.innerText = dict.card1Sub;
+          text.innerText = dict.briefingTna;
+        } else if (currentStep === 1) {
+          title.innerText = dict.card2Sub;
+          text.innerText = dict.briefingOjt;
+        } else if (currentStep === 2) {
+          title.innerText = dict.card3Sub;
+          text.innerText = dict.briefingEval;
+        } else if (currentStep === 3) {
+          title.innerText = dict.card4Sub;
+          text.innerText = dict.briefingRoi;
+        }
+      }
+    }
+
+    function startGameAction() {
+      gameStarted[currentStep] = true;
+      triggerSuccessCelebration(); // visual startup splash
+      updateBriefingOverlay();
+    }
+
+    function checkSuccessOverlayState() {
+      const isDone = stepCompleted[currentStep];
+      const overlay = document.getElementById("successOverlay");
+      const title = document.getElementById("successBannerTitle");
+      const sub = document.getElementById("successBannerSub");
+      const dict = isEnglish ? translations.en : translations.si;
+
+      // Only show goal banner if they started the game and cleared it
+      if (isDone && gameStarted[currentStep]) {
+        title.innerText = dict.goalCompleted;
+        if (currentStep === 0) sub.innerText = dict.tnaGoalCompleted;
+        else if (currentStep === 1) sub.innerText = dict.ojtGoalCompleted;
+        else if (currentStep === 2) sub.innerText = dict.evalGoalCompleted;
+        else if (currentStep === 3) sub.innerText = dict.roiGoalCompleted;
+
+        overlay.style.opacity = "1";
+        overlay.classList.remove("pointer-events-none");
+      } else {
+        overlay.style.opacity = "0";
+        overlay.classList.add("pointer-events-none");
+      }
+    }
+
+
+    // ==================== 5. SIMULATOR LOGIC & GRAPHICS DATA ====================
+
+    // --- SIMULATOR 1: TNA DIAGNOSTICS ---
+    function initStep1Data() {
+      step1Nodes = [
+        { 
+          id: 1, 
+          textEN: "Engineering teams lacking cloud-native secure design patterns", 
+          textSI: "ක්ලවුඩ් පද්ධති සහ ආරක්ෂණ සැලසුම් පිළිබඳ දැනුමක් ඉංජිනේරු කණ්ඩායම්වලට නොමැති වීම", 
+          target: "cant", isLocked: false, isDragging: false, x: 0, y: 0, origX: 0, origY: 0, w: 0, h: 0, assignedTarget: null, color: "#00f0ff" 
+        },
+        { 
+          id: 2, 
+          textEN: "Sales reps ignoring subscription contracts to hunt immediate commission payouts", 
+          textSI: "කොමිස් ව්‍යුහය නිසා කෙටි කාලීන විකුණුම් පමණක් සිදු කර දිගු කාලීන ගනුදෙනු මඟහැරීම", 
+          target: "wont", isLocked: false, isDragging: false, x: 0, y: 0, origX: 0, origY: 0, w: 0, h: 0, assignedTarget: null, color: "#f59e0b" 
+        },
+        { 
+          id: 3, 
+          textEN: "Support agents unable to explain the newly integrated cross-border payment protocol", 
+          textSI: "පාරිභෝගික සේවා නිලධාරීන්ට නව විදෙස් ගෙවීම් පද්ධතියේ ක්‍රියාකාරිත්වය පැහැදිලි කිරීමට නොහැකි වීම", 
+          target: "cant", isLocked: false, isDragging: false, x: 0, y: 0, origX: 0, origY: 0, w: 0, h: 0, assignedTarget: null, color: "#00f0ff" 
+        },
+        { 
+          id: 4, 
+          textEN: "Operators bypassing basic multi-factor security checklists to meet daily volume quotas", 
+          textSI: "වැඩි සේවා ප්‍රමාණයක් ඇති දිනවලදී කාලය ඉතිරි කර ගැනීමට ආරක්ෂක පියවර මඟහැරීම", 
+          target: "wont", isLocked: false, isDragging: false, x: 0, y: 0, origX: 0, origY: 0, w: 0, h: 0, assignedTarget: null, color: "#f59e0b" 
+        },
+        { 
+          id: 5, 
+          textEN: "Finance officers unaware of the newly updated global data privacy compliance codes", 
+          textSI: "නව ගෝලීය දත්ත රහස්‍යතා නීති (GDPR) පිළිබඳව සේවකයින් දැනුවත් නොවීම", 
+          target: "cant", isLocked: false, isDragging: false, x: 0, y: 0, origX: 0, origY: 0, w: 0, h: 0, assignedTarget: null, color: "#00f0ff" 
+        },
+        { 
+          id: 6, 
+          textEN: "Talented executives leaving early due to burn-out from rigid shift allocation schedules", 
+          textSI: "දැඩි වැඩ මුර කාලසටහන් නිසා ඇති වන විඩාව හේතුවෙන් සේවකයින් සේවය හැර යාම", 
+          target: "wont", isLocked: false, isDragging: false, x: 0, y: 0, origX: 0, origY: 0, w: 0, h: 0, assignedTarget: null, color: "#f59e0b" 
+        }
+      ];
+      repositionStep1Targets();
+      
+      // Shuffle the starting arrangements to ensure non-obvious positions
+      shuffleArray(step1Nodes);
+      repositionStep1Targets();
+    }
+
+    function repositionStep1Targets() {
+      if (!canvas) return;
+      const w = canvas.width;
+      const h = canvas.height;
+
+      cantDoTarget.x = w * 0.23;
+      cantDoTarget.y = h * 0.74;
+      cantDoTarget.r = Math.min(w * 0.20, h * 0.20, 52);
+
+      wontDoTarget.x = w * 0.77;
+      wontDoTarget.y = h * 0.74;
+      wontDoTarget.r = Math.min(w * 0.20, h * 0.20, 52);
+
+      // Distribute scenarios cleanly at the top of the canvas viewport
+      const gapX = w / 4;
+      const cardWidth = Math.max(140, w * 0.28);
+      const cardHeight = Math.max(44, h * 0.18);
+
+      step1Nodes.forEach((node, i) => {
+        let row = Math.floor(i / 3);
+        let col = i % 3;
+        
+        node.w = cardWidth;
+        node.h = cardHeight;
+        node.origX = (col + 1) * gapX - (gapX / 2.2) + (Math.sin(i) * 3);
+        node.origY = h * 0.14 + (row * (h * 0.21));
+
+        if (!node.isDragging) {
+          if (node.assignedTarget === null) {
+            node.x = node.origX;
+            node.y = node.origY;
+          } else {
+            const t = node.assignedTarget === 'cant' ? cantDoTarget : wontDoTarget;
+            const angle = (node.id * 2 * Math.PI) / 6;
+            const dist = t.r * 0.45;
+            node.x = t.x + Math.sin(angle) * dist;
+            node.y = t.y + Math.cos(angle) * dist;
+          }
+        }
+      });
+    }
+
+    function updateStep1UI() {
+      const placedCount = step1Nodes.filter(n => n.assignedTarget !== null).length;
+      let correctCount = 0;
+      step1Nodes.forEach(n => {
+        if (n.assignedTarget === n.target) {
+          correctCount++;
+        }
+      });
+
+      const indicator = document.getElementById("step1Score");
+      if (indicator) {
+        if (placedCount < 6) {
+          indicator.innerText = isEnglish ? `${placedCount} / 6 SCENARIOS PLACED` : `${placedCount} / 6 ක් ස්ථානගත කර ඇත`;
+        } else {
+          if (correctCount === 6) {
+            indicator.innerText = isEnglish ? `ALL CORRECT! DIAGNOSTIC COMPLETE` : `සියල්ල නිවැරදියි! විශ්ලේෂණය සාර්ථකයි`;
+          } else {
+            indicator.innerText = isEnglish ? `${correctCount} / 6 CORRECT - RE-EVALUATE!` : `${correctCount} / 6 නිවැරදියි - නැවත සලකා බලන්න!`;
+          }
+        }
+      }
+
+      if (correctCount === 6) {
+        stepCompleted[0] = true;
+        checkSuccessOverlayState();
+      } else {
+        stepCompleted[0] = false;
+        checkSuccessOverlayState();
+      }
+    }
+
+
+    // --- SIMULATOR 2: METHODOLOGY CALIBRATION ---
+    function updateMethodologySliders() {
+      ojtHours = parseInt(document.getElementById("inputOjt").value);
+      offjtHours = parseInt(document.getElementById("inputOff").value);
+
+      document.getElementById("valOjt").innerText = `${ojtHours} hrs`;
+      document.getElementById("valOff").innerText = `${offjtHours} hrs`;
+
+      // Empirical balanced formulas from general CHRM training framework:
+      const practical = Math.min(100, Math.round(ojtHours * 1.2 + offjtHours * 0.2));
+      const theory = Math.min(100, Math.round(ojtHours * 0.25 + offjtHours * 1.15));
+      const cost = (ojtHours * 20) + (offjtHours * 35);
+
+      document.getElementById("outPrac").innerText = `${practical}%`;
+      document.getElementById("outTheo").innerText = `${theory}%`;
+      document.getElementById("outCost").innerText = `$${cost.toLocaleString()}`;
+
+      // Targets: Practical >= 80%, Theory >= 80% and Costs <= 5000
+      const isBalanced = (practical >= 80 && theory >= 80 && cost <= 5000);
+      methodologyScoreValid = isBalanced;
+
+      // Color coding metrics matching cyber style
+      document.getElementById("outPrac").className = practical >= 80 ? "text-xs sm:text-sm font-bold text-cyberEmerald" : "text-xs sm:text-sm font-bold text-cyberDanger";
+      document.getElementById("outTheo").className = theory >= 80 ? "text-xs sm:text-sm font-bold text-cyberCyan" : "text-xs sm:text-sm font-bold text-cyberDanger";
+      document.getElementById("outCost").className = cost <= 5000 ? "text-xs sm:text-sm font-bold text-cyberEmerald" : "text-xs sm:text-sm font-bold text-cyberDanger";
+
+      if (isBalanced) {
+        stepCompleted[1] = true;
+        checkSuccessOverlayState();
+      } else {
+        stepCompleted[1] = false;
+        checkSuccessOverlayState();
+      }
+    }
+
+
+    // --- SIMULATOR 3: KIRKPATRICK TIMELINE ---
+    function initStep3Data() {
+      // Setup timeline sockets
+      step3Sockets = [
+        { level: 1, textEN: "1. Reaction", textSI: "1. ප්‍රතිචාරය", x: 0, y: 0, w: 0, h: 0, lockedBlock: null },
+        { level: 2, textEN: "2. Learning", textSI: "2. ඉගෙනුම", x: 0, y: 0, w: 0, h: 0, lockedBlock: null },
+        { level: 3, textEN: "3. Behavior", textSI: "3. හැසිරීම", x: 0, y: 0, w: 0, h: 0, lockedBlock: null },
+        { level: 4, textEN: "4. Results", textSI: "4. ප්‍රතිඵල", x: 0, y: 0, w: 0, h: 0, lockedBlock: null }
+      ];
+
+      // Highly non-obvious blocks mapped to correct assessment metrics
+      step3Blocks = [
+        { 
+          id: 1, targetLvl: 1, 
+          textEN: "Pulse feedback forms & digital NPS surveys", 
+          textSI: "NPS සමීක්ෂණ සහ තෘප්තිමත්භාවය මැනීමේ පෝරම", 
+          x: 0, y: 0, isDragging: false, isLocked: false, origX: 0, origY: 0, assignedSocketLevel: null, color: "#06b6d4" 
+        },
+        { 
+          id: 2, targetLvl: 2, 
+          textEN: "Sandbox simulator scores & post-training tests", 
+          textSI: "දැනුම මැනීමේ පරීක්ෂණ සහ සිමියුලේටර් ඇගයීම්", 
+          x: 0, y: 0, isDragging: false, isLocked: false, origX: 0, origY: 0, assignedSocketLevel: null, color: "#10b981" 
+        },
+        { 
+          id: 3, targetLvl: 3, 
+          textEN: "360° audit reviews & workplace behavioral checks", 
+          textSI: "360° සමාලෝචන සහ සේවා ස්ථානයේ හැසිරීම් ඇගයීම්", 
+          x: 0, y: 0, isDragging: false, isLocked: false, origX: 0, origY: 0, assignedSocketLevel: null, color: "#fbbf24" 
+        },
+        { 
+          id: 4, targetLvl: 4, 
+          textEN: "11% lower churn rate & faster deployment cycles", 
+          textSI: "පාරිභෝගික රඳවා ගැනීම් සහ ව්‍යාපාරික ආදායම් වර්ධනය", 
+          x: 0, y: 0, isDragging: false, isLocked: false, origX: 0, origY: 0, assignedSocketLevel: null, color: "#f43f5e" 
+        }
+      ];
+      
+      shuffleArray(step3Blocks);
+      repositionStep3Components();
+    }
+
+    function repositionStep3Components() {
+      if (!canvas) return;
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const socketWidth = w * 0.21;
+      const socketHeight = h * 0.25;
+      const startX = w * 0.05;
+      const gapX = w * 0.23;
+
+      step3Sockets.forEach((sock, idx) => {
+        sock.x = startX + (idx * gapX);
+        sock.y = h * 0.16;
+        sock.w = socketWidth;
+        sock.h = socketHeight;
+      });
+
+      const blockWidth = w * 0.19;
+      const blockHeight = h * 0.21;
+      const blockGap = w * 0.23;
+      const bStartX = w * 0.06;
+
+      step3Blocks.forEach((block, idx) => {
+        block.origX = bStartX + (idx * blockGap);
+        block.origY = h * 0.65;
+        block.w = blockWidth;
+        block.h = blockHeight;
+        
+        if (!block.isDragging) {
+          if (block.assignedSocketLevel === null) {
+            block.x = block.origX;
+            block.y = block.origY;
+          } else {
+            const socket = step3Sockets.find(s => s.level === block.assignedSocketLevel);
+            if (socket) {
+              block.x = socket.x + (socket.w - block.w) / 2;
+              block.y = socket.y + (socket.h - block.h) / 2;
+            }
+          }
+        }
+      });
+    }
+
+    function updateStep3UI() {
+      const placedCount = step3Blocks.filter(b => b.assignedSocketLevel !== null).length;
+      let correctCount = 0;
+      step3Blocks.forEach(b => {
+        if (b.assignedSocketLevel === b.targetLvl) {
+          correctCount++;
+        }
+      });
+
+      const display = document.getElementById("step3ScoreText");
+      if (display) {
+        if (placedCount < 4) {
+          display.innerText = isEnglish ? `${placedCount} / 4 PLACED` : `${placedCount} / 4 ස්ථානගත කර ඇත`;
+        } else {
+          if (correctCount === 4) {
+            display.innerText = isEnglish ? `ALL CORRECT! PIPELINE SECURED` : `සියල්ල නිවැරදියි! කාලරාමුව සුරක්ෂිතයි`;
+          } else {
+            display.innerText = isEnglish ? `${correctCount} / 4 CORRECT - TRY AGAIN!` : `${correctCount} / 4 නිවැරදියි - නැවත උත්සාහ කරන්න!`;
+          }
+        }
+      }
+
+      if (correctCount === 4) {
+        stepCompleted[2] = true;
+        checkSuccessOverlayState();
+      } else {
+        stepCompleted[2] = false;
+        checkSuccessOverlayState();
+      }
+    }
+
+
+    // --- SIMULATOR 4: SUCCESSION PLANNING & ROI ---
+    function initStep4Data() {
+      step4Roles = [
+        { id: 1, roleEN: "CEO Position", roleSI: "CEO තනතුර", maxCount: 2, x: 0, y: 0, r: 0 },
+        { id: 2, roleEN: "CHRO Position", roleSI: "CHRO තනතුර", maxCount: 2, x: 0, y: 0, r: 0 },
+        { id: 3, roleEN: "CFO Position", roleSI: "CFO තනතුර", maxCount: 2, x: 0, y: 0, r: 0 },
+        { id: 4, roleEN: "CTO Position", roleSI: "CTO තනතුර", maxCount: 2, x: 0, y: 0, r: 0 },
+        { id: 5, roleEN: "COO Position", roleSI: "COO තනතුර", maxCount: 2, x: 0, y: 0, r: 0 }
+      ];
+
+      const names = ["Amara", "Bimal", "Chitra", "Dilini", "Eshara", "Feroz", "Gihan", "Harsha", "Imalka", "Janith"];
+      step4Successors = [];
+      for (let i = 0; i < 10; i++) {
+        step4Successors.push({
+          id: i + 1,
+          name: names[i],
+          x: 0,
+          y: 0,
+          r: 0,
+          origX: 0,
+          origY: 0,
+          isDragging: false,
+          assignedRoleId: null
+        });
+      }
+      repositionStep4Components();
+    }
+
+    function repositionStep4Components() {
+      if (!canvas) return;
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const pedGap = w * 0.18;
+      const pedStartX = w * 0.14;
+      step4Roles.forEach((role, i) => {
+        role.x = pedStartX + (i * pedGap);
+        role.y = h * 0.32; // adjusted slightly lower for visual breathing room at the top
+        role.r = Math.min(w * 0.10, h * 0.12, 30); // expanded radius for executive nodes
+      });
+
+      const succGap = w * 0.088;
+      const succStartX = w * 0.11;
+      step4Successors.forEach((succ, i) => {
+        succ.origX = succStartX + (i * succGap);
+        succ.origY = h * 0.74;
+        succ.r = Math.min(w * 0.05, h * 0.065, 17); // expanded successor circle radius
+        
+        if (!succ.isDragging) {
+          if (succ.assignedRoleId === null) {
+            succ.x = succ.origX;
+            succ.y = succ.origY;
+          } else {
+            const role = step4Roles.find(r => r.id === succ.assignedRoleId);
+            if (role) {
+              const assignedList = step4Successors.filter(s => s.assignedRoleId === role.id);
+              const slotIndex = assignedList.indexOf(succ);
+              // Draw staggered layout cleanly inside the roles
+              succ.x = role.x + (slotIndex === 0 ? -14 : 14);
+              succ.y = role.y - 12;
+              succ.r = Math.min(w * 0.04, h * 0.05, 12); // slightly smaller when nested inside roles
+            }
+          }
+        }
+      });
+    }
+
+    function updateRoiSliders() {
+      roiCost = parseInt(document.getElementById("inputSpend").value);
+      roiBenefits = parseInt(document.getElementById("inputBenefit").value);
+
+      document.getElementById("valSpend").innerText = `$${roiCost.toLocaleString()}`;
+      document.getElementById("valBenefit").innerText = `$${roiBenefits.toLocaleString()}`;
+
+      // ROI % = ((Benefit - Cost) / Cost) * 100
+      const roi = Math.round(((roiBenefits - roiCost) / roiCost) * 100);
+      document.getElementById("outRoi").innerText = `${roi}%`;
+
+      const roiPass = roi >= 150;
+      document.getElementById("outRoi").className = roiPass ? "text-xs sm:text-sm font-bold text-cyberEmerald" : "text-xs sm:text-sm font-bold text-cyberDanger";
+
+      recalculateBenchStrength();
+    }
+
+    function recalculateBenchStrength() {
+      // Robust Succession Audit: Check if every critical role node has exactly 2 successors assigned
+      let allRolesCovered = true;
+      step4Roles.forEach(role => {
+        const count = step4Successors.filter(s => s.assignedRoleId === role.id).length;
+        if (count < 2) {
+          allRolesCovered = false;
+        }
+      });
+
+      const assignedCount = step4Successors.filter(s => s.assignedRoleId !== null).length;
+      const bsr = parseFloat((assignedCount / 5).toFixed(1));
+      
+      const bsrText = isEnglish 
+        ? `${bsr} / 2.0 Target (${assignedCount}/10 Placed)` 
+        : `${bsr} / 2.0 ඉලක්කය (${assignedCount}/10 ස්ථානගත කර ඇත)`;
+      document.getElementById("outBsr").innerText = bsrText;
+
+      const bsrPass = bsr >= 2.0 && allRolesCovered;
+      document.getElementById("outBsr").className = bsrPass ? "text-xs sm:text-sm font-bold text-cyberEmerald" : "text-xs sm:text-sm font-bold text-cyberDanger";
+
+      const roi = Math.round(((roiBenefits - roiCost) / roiCost) * 100);
+      if (bsrPass && roi >= 150) {
+        stepCompleted[3] = true;
+        checkSuccessOverlayState();
+        enableMasterBadge();
+      } else {
+        stepCompleted[3] = false;
+        disableMasterBadge();
+        checkSuccessOverlayState();
+      }
+    }
+
+    function enableMasterBadge() {
+      const btn = document.getElementById("step3Action");
+      const hBtn = document.getElementById("headerBadgeBtn");
+      const tip = document.getElementById("badgeTooltip");
+      const dict = isEnglish ? translations.en : translations.si;
+
+      btn.disabled = false;
+      btn.className = "w-full mt-4 bg-gradient-to-r from-yellow-500 via-amber-500 to-emerald-500 hover:scale-[1.01] active:scale-[0.99] hover:brightness-110 text-slate-900 font-display font-bold py-3.5 rounded-lg shadow-lg shadow-yellow-500/25 text-xs uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 pulse-cyan-glow";
+
+      hBtn.disabled = false;
+      hBtn.className = "cursor-pointer transition-all duration-300 relative group flex items-center justify-center pulse-gold-glow";
+      hBtn.querySelector("div").className = "bg-slate-950 border border-yellow-500 rounded-full p-1.5 relative";
+      tip.innerText = dict.badgeUnlockedTip;
+    }
+
+    function disableMasterBadge() {
+      const btn = document.getElementById("step3Action");
+      const hBtn = document.getElementById("headerBadgeBtn");
+      const tip = document.getElementById("badgeTooltip");
+      const dict = isEnglish ? translations.en : translations.si;
+
+      btn.disabled = true;
+      btn.className = "w-full mt-4 bg-gradient-to-r from-yellow-500 via-amber-500 to-emerald-500 opacity-50 cursor-not-allowed text-slate-900 font-display font-bold py-3.5 rounded-lg shadow-lg text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2";
+
+      hBtn.disabled = true;
+      hBtn.className = "opacity-40 cursor-not-allowed transition-all duration-300 relative group flex items-center justify-center";
+      hBtn.querySelector("div").className = "bg-slate-950 border border-amber-500/50 rounded-full p-1.5 relative";
+      tip.innerText = dict.badgeLockedTip;
+    }
+
+
+    // ==================== 6. FLOATING PARTICLES AND PHYSICS SIM ====================
+    function triggerSuccessCelebration() {
+      const midX = canvas.width / 2;
+      const midY = canvas.height / 2;
+      for (let i = 0; i < 40; i++) {
+        particles.push({
+          x: midX,
+          y: midY,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          alpha: 1,
+          color: `hsl(${140 + Math.random() * 40}, 100%, 60%)`,
+          size: 2 + Math.random() * 4
+        });
+      }
+    }
+
+    function updateAndDrawParticles() {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.02;
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+
+    // ==================== 7. MOUSE & TOUCH EVENT HANDLERS ====================
+    function onPointerDown(e) {
+      if (!gameStarted[currentStep]) return; // Block input if game briefing is open
+      isMouseDown = true;
+
+      // STEP 1 INTERACTIONS
+      if (currentStep === 0) {
+        for (let i = step1Nodes.length - 1; i >= 0; i--) {
+          const node = step1Nodes[i];
+          
+          // Re-evaluation rule: if clicking an already classified capsule, unlock it instantly
+          const hw = node.w / 2;
+          const hh = node.h / 2;
+          if (mouseX >= node.x - hw && mouseX <= node.x + hw && mouseY >= node.y - hh && mouseY <= node.y + hh) {
+            draggedElement = { type: 'step1', index: i };
+            node.isDragging = true;
+            node.isLocked = false;
+            node.assignedTarget = null; // free up spot
+            dragOffsetX = mouseX - node.x;
+            dragOffsetY = mouseY - node.y;
+            break;
+          }
+        }
+      }
+
+      // STEP 3 INTERACTIONS
+      else if (currentStep === 2) {
+        for (let i = step3Blocks.length - 1; i >= 0; i--) {
+          const b = step3Blocks[i];
+          if (mouseX >= b.x && mouseX <= b.x + b.w && mouseY >= b.y && mouseY <= b.y + b.h) {
+            draggedElement = { type: 'step3', index: i };
+            b.isDragging = true;
+            b.isLocked = false;
+            b.assignedSocketLevel = null; // disconnect assignment on drag initiation
+            dragOffsetX = mouseX - b.x;
+            dragOffsetY = mouseY - b.y;
+            break;
+          }
+        }
+      }
+
+      // STEP 4 INTERACTIONS
+      else if (currentStep === 3) {
+        for (let i = step4Successors.length - 1; i >= 0; i--) {
+          const s = step4Successors[i];
+          const dist = Math.hypot(mouseX - s.x, mouseY - s.y);
+          if (dist < s.r + 10) { // added safe margin bounds for touch/drag accuracy
+            draggedElement = { type: 'step4', index: i };
+            s.isDragging = true;
+            s.assignedRoleId = null; 
+            dragOffsetX = mouseX - s.x;
+            dragOffsetY = mouseY - s.y;
+            break;
+          }
+        }
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!isMouseDown || !draggedElement) return;
+
+      if (draggedElement.type === 'step1') {
+        const node = step1Nodes[draggedElement.index];
+        node.x = mouseX - dragOffsetX;
+        node.y = mouseY - dragOffsetY;
+      }
+
+      else if (draggedElement.type === 'step3') {
+        const b = step3Blocks[draggedElement.index];
+        b.x = mouseX - dragOffsetX;
+        b.y = mouseY - dragOffsetY;
+      }
+
+      else if (draggedElement.type === 'step4') {
+        const s = step4Successors[draggedElement.index];
+        s.x = mouseX - dragOffsetX;
+        s.y = mouseY - dragOffsetY;
+      }
+    }
+
+    function onPointerUp(e) {
+      isMouseDown = false;
+      if (!draggedElement) return;
+
+      // STEP 1 RELEASES
+      if (draggedElement.type === 'step1') {
+        const node = step1Nodes[draggedElement.index];
+        node.isDragging = false;
+
+        const distToCant = Math.hypot(node.x - cantDoTarget.x, node.y - cantDoTarget.y);
+        const distToWont = Math.hypot(node.x - wontDoTarget.x, node.y - wontDoTarget.y);
+
+        let correctRelease = false;
+
+        // Smart Drop: Can drop into EITHER classification target cleanly
+        if (distToCant < cantDoTarget.r + 45) {
+          node.assignedTarget = 'cant';
+          node.isLocked = true;
+          correctRelease = true;
+        } else if (distToWont < wontDoTarget.r + 45) {
+          node.assignedTarget = 'wont';
+          node.isLocked = true;
+          correctRelease = true;
+        }
+
+        if (!correctRelease) {
+          node.x = node.origX;
+          node.y = node.origY;
+          node.assignedTarget = null;
+          node.isLocked = false;
+        } else {
+          triggerMiniCelebration(node.x, node.y);
+        }
+        repositionStep1Targets();
+        updateStep1UI();
+      }
+
+      // STEP 3 RELEASES
+      else if (draggedElement.type === 'step3') {
+        const b = step3Blocks[draggedElement.index];
+        b.isDragging = false;
+
+        let closestSocket = null;
+        let minDist = 999999;
+
+        // Find nearest chronological socket for mapping
+        step3Sockets.forEach(sock => {
+          const sCenterX = sock.x + sock.w / 2;
+          const sCenterY = sock.y + sock.h / 2;
+          const bCenterX = b.x + b.w / 2;
+          const bCenterY = b.y + b.h / 2;
+          const dist = Math.hypot(bCenterX - sCenterX, bCenterY - sCenterY);
+
+          if (dist < minDist) {
+            minDist = dist;
+            closestSocket = sock;
+          }
+        });
+
+        if (closestSocket && minDist < closestSocket.w * 0.9) {
+          // Collision swap: if a block already occupies this socket, kick it back to its original slot
+          const existing = step3Blocks.find(block => block.assignedSocketLevel === closestSocket.level);
+          if (existing) {
+            existing.assignedSocketLevel = null;
+            existing.isLocked = false;
+            existing.x = existing.origX;
+            existing.y = existing.origY;
+          }
+
+          b.assignedSocketLevel = closestSocket.level;
+          b.isLocked = true;
+          triggerMiniCelebration(b.x + b.w / 2, b.y + b.h / 2);
+        } else {
+          b.x = b.origX;
+          b.y = b.origY;
+          b.assignedSocketLevel = null;
+          b.isLocked = false;
+        }
+        repositionStep3Components();
+        updateStep3UI();
+      }
+
+      // STEP 4 RELEASES
+      else if (draggedElement.type === 'step4') {
+        const succ = step4Successors[draggedElement.index];
+        succ.isDragging = false;
+
+        let placed = false;
+        for (let i = 0; i < step4Roles.length; i++) {
+          const role = step4Roles[i];
+          const dist = Math.hypot(succ.x - role.x, succ.y - role.y);
+          const currentCount = step4Successors.filter(s => s.assignedRoleId === role.id).length;
+
+          if (dist < role.r + 35 && currentCount < role.maxCount) {
+            succ.assignedRoleId = role.id;
+            placed = true;
+            triggerMiniCelebration(succ.x, succ.y);
+            break;
+          }
+        }
+
+        if (!placed) {
+          succ.x = succ.origX;
+          succ.y = succ.origY;
+          succ.assignedRoleId = null;
+        }
+        repositionStep4Components();
+        recalculateBenchStrength();
+      }
+
+      draggedElement = null;
+    }
+
+    function triggerMiniCelebration(cx, cy) {
+      for (let i = 0; i < 15; i++) {
+        particles.push({
+          x: cx,
+          y: cy,
+          vx: (Math.random() - 0.5) * 5,
+          vy: (Math.random() - 0.5) * 5,
+          alpha: 1,
+          color: "#00f0ff",
+          size: 1.5 + Math.random() * 2
+        });
+      }
+    }
+
+
+    // ==================== 8. CORE RENDERING ENGINE ====================
+    function gameLoop() {
+      ctx.fillStyle = "#050815";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      drawGridLines();
+
+      // Viewport switching logic
+      if (currentStep === 0) {
+        drawStep1();
+      } else if (currentStep === 1) {
+        drawStep2();
+      } else if (currentStep === 2) {
+        drawStep3();
+      } else if (currentStep === 3) {
+        drawStep4();
+      }
+
+      updateAndDrawParticles();
+      animationId = requestAnimationFrame(gameLoop);
+    }
+
+    function drawGridLines() {
+      ctx.strokeStyle = "rgba(30, 41, 59, 0.12)";
+      ctx.lineWidth = 1;
+      const gridSize = 25;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+    }
+
+    // --- STEP 1 RENDER ---
+    function drawStep1() {
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const targets = [cantDoTarget, wontDoTarget];
+      targets.forEach((t) => {
+        const isCant = t === cantDoTarget;
+        const color = isCant ? "rgba(0, 240, 255, 0.08)" : "rgba(245, 158, 11, 0.08)";
+        const strokeColor = isCant ? "#00f0ff" : "#f59e0b";
+
+        ctx.save();
+        ctx.shadowColor = strokeColor;
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = color;
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 1.5;
+
+        // Draw target vessels
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.r + 8, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        // Label target - scaled up for premium legibility
+        ctx.fillStyle = strokeColor;
+        ctx.font = "bold 11px Space Grotesk, Noto Sans Sinhala";
+        ctx.textAlign = "center";
+        const text = isEnglish ? t.labelEN : t.labelSI;
+        
+        const words = text.split(" ");
+        if (words.length > 2) {
+          ctx.fillText(words.slice(0, 2).join(" "), t.x, t.y - 4);
+          ctx.fillText(words.slice(2).join(" "), t.x, t.y + 8);
+        } else {
+          ctx.fillText(text, t.x, t.y + 3);
+        }
+      });
+
+      // Scattered capsule cards drawing loop with perfect wrapped text
+      step1Nodes.forEach((node) => {
+        ctx.save();
+        
+        // Scale down classified capsules to comfortably fit target circles
+        const scale = node.assignedTarget !== null ? 0.75 : 1.0;
+        const nw = node.w * scale;
+        const nh = node.h * scale;
+        const hw = nw / 2;
+        const hh = nh / 2;
+
+        ctx.shadowColor = node.color;
+        ctx.shadowBlur = node.isDragging ? 12 : 4;
+        ctx.fillStyle = "rgba(15, 23, 42, 0.95)";
+        ctx.strokeStyle = node.assignedTarget !== null ? "#10b981" : node.color;
+        ctx.lineWidth = 1.8;
+
+        ctx.beginPath();
+        ctx.roundRect(node.x - hw, node.y - hh, nw, nh, 6);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = `bold ${8.5 * scale}px Noto Sans, Noto Sans Sinhala`; // scaled text sizes
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        const nodeText = isEnglish ? node.textEN : node.textSI;
+        drawWrappedText(ctx, nodeText, node.x, node.y, nw - 12, 9.5 * scale);
+      });
+    }
+
+    // --- STEP 2 RENDER ---
+    function drawStep2() {
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const midX = w / 2;
+      const pivotY = h / 2 + 10;
+
+      // Draw scale base
+      ctx.strokeStyle = "rgba(15, 23, 42, 0.9)";
+      ctx.fillStyle = "#1e293b";
+      ctx.lineWidth = 3;
+      
+      ctx.beginPath();
+      ctx.moveTo(midX, pivotY);
+      ctx.lineTo(midX, h * 0.85);
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.moveTo(midX - 30, h * 0.85);
+      ctx.lineTo(midX + 30, h * 0.85);
+      ctx.stroke();
+
+      const diff = ojtHours - offjtHours;
+      const tilt = Math.max(-0.22, Math.min(0.22, diff * 0.004));
+
+      const armLength = Math.min(w * 0.35, 100);
+      const leftEndX = midX - armLength * Math.cos(tilt);
+      const leftEndY = pivotY - armLength * Math.sin(tilt);
+      const rightEndX = midX + armLength * Math.cos(tilt);
+      const rightEndY = pivotY + armLength * Math.sin(tilt);
+
+      ctx.strokeStyle = methodologyScoreValid ? "#10b981" : "#f59e0b";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(leftEndX, leftEndY);
+      ctx.lineTo(rightEndX, rightEndY);
+      ctx.stroke();
+
+      ctx.fillStyle = "#00f0ff";
+      ctx.beginPath();
+      ctx.arc(midX, pivotY, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      drawScaleBasket(leftEndX, leftEndY, ojtHours, "OJT", "#00f0ff");
+      drawScaleBasket(rightEndX, rightEndY, offjtHours, "Off-JT", "#10b981");
+
+      ctx.fillStyle = methodologyScoreValid ? "#10b981" : "#ef4444";
+      ctx.font = "bold 12px Space Grotesk, Noto Sans Sinhala"; // optimized readability
+      ctx.textAlign = "center";
+      
+      const dict = isEnglish ? translations.en : translations.si;
+      const statusLabel = methodologyScoreValid ? (isEnglish ? "PERFECT EQUILIBRIUM" : "පරිපූර්ණ සමතුලිතතාවයකි") : (isEnglish ? "UNBALANCED METHODOLOGY" : "නොසමබර පුහුණු ක්‍රමවේද");
+      ctx.fillText(statusLabel, midX, h * 0.16);
+    }
+
+    // --- STEP 3 RENDER ---
+    function drawStep3() {
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.strokeStyle = "rgba(99, 102, 241, 0.18)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i < step3Sockets.length - 1; i++) {
+        const s1 = step3Sockets[i];
+        const s2 = step3Sockets[i+1];
+        ctx.moveTo(s1.x + s1.w / 2, s1.y + s1.h / 2);
+        ctx.lineTo(s2.x + s2.w / 2, s2.y + s2.h / 2);
+      }
+      ctx.stroke();
+
+      step3Sockets.forEach((sock, idx) => {
+        ctx.strokeStyle = "rgba(99, 102, 241, 0.35)";
+        ctx.fillStyle = "rgba(15, 23, 42, 0.4)";
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([3, 3]);
+        
+        ctx.beginPath();
+        ctx.roundRect(sock.x, sock.y, sock.w, sock.h, 4);
+        ctx.fill();
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = "rgba(156, 163, 175, 0.85)";
+        ctx.font = "bold 10.5px Noto Sans, Noto Sans Sinhala"; // scaled up header sizes
+        ctx.textAlign = "center";
+        
+        const dict = isEnglish ? translations.en : translations.si;
+        const keys = ["level1Name", "level2Name", "level3Name", "level4Name"];
+        ctx.fillText(dict[keys[idx]], sock.x + sock.w / 2, sock.y - 8);
+      });
+
+      step3Blocks.forEach((b) => {
+        ctx.save();
+        ctx.shadowColor = b.color;
+        ctx.shadowBlur = b.isDragging ? 10 : 3;
+        ctx.fillStyle = b.assignedSocketLevel !== null ? "rgba(16, 185, 129, 0.8)" : b.color;
+        ctx.strokeStyle = b.assignedSocketLevel !== null ? "#10b981" : "rgba(255,255,255,0.15)";
+        ctx.lineWidth = 1.2;
+
+        ctx.beginPath();
+        ctx.roundRect(b.x, b.y, b.w, b.h, 4);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 9.5px Noto Sans, Noto Sans Sinhala"; // expanded body block text
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        const txt = isEnglish ? b.textEN : b.textSI;
+        drawWrappedText(ctx, txt, b.x + b.w / 2, b.y + b.h / 2, b.w - 10, 11);
+      });
+    }
+
+    // --- STEP 4 RENDER ---
+    function drawStep4() {
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Draw Executive Roles
+      step4Roles.forEach((role, i) => {
+        const assigned = step4Successors.filter(s => s.assignedRoleId === role.id);
+        const count = assigned.length;
+
+        ctx.save();
+        ctx.shadowColor = "#f59e0b";
+        ctx.shadowBlur = count > 0 ? 8 : 1;
+        ctx.fillStyle = "rgba(15, 23, 42, 0.8)";
+        ctx.strokeStyle = count >= role.maxCount ? "#10b981" : "#f59e0b";
+        ctx.lineWidth = 2.2;
+
+        ctx.beginPath();
+        ctx.arc(role.x, role.y, role.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // Label Executive roles (highly readable typography)
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 11px Noto Sans, Noto Sans Sinhala";
+        ctx.textAlign = "center";
+        
+        const dict = isEnglish ? translations.en : translations.si;
+        const keys = ["roleCEO", "roleCHRO", "roleCFO", "roleCTO", "roleCOO"];
+        ctx.fillText(dict[keys[i]], role.x, role.y + role.r + 14);
+
+        // Display capacity indicators underneath the role node
+        for (let idx = 0; idx < role.maxCount; idx++) {
+          ctx.fillStyle = idx < count ? "#10b981" : "rgba(148, 163, 184, 0.25)";
+          ctx.beginPath();
+          ctx.arc(role.x - 8 + (idx * 16), role.y + 11, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+
+      // Draw Successor Nodes (Audited and scaled)
+      step4Successors.forEach((succ) => {
+        ctx.save();
+        ctx.shadowColor = "#00f0ff";
+        ctx.shadowBlur = succ.isDragging ? 10 : 3;
+        ctx.fillStyle = succ.assignedRoleId !== null ? "#10b981" : "#0f172a";
+        ctx.strokeStyle = succ.assignedRoleId !== null ? "#047857" : "#00f0ff";
+        ctx.lineWidth = 1.5;
+
+        ctx.beginPath();
+        ctx.arc(succ.x, succ.y, succ.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // Single letter initial inside circular nodes
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 12px Space Grotesk";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(succ.name[0], succ.x, succ.y);
+
+        // Draw elegant glowing capsules for unassigned names
+        if (succ.assignedRoleId === null) {
+          const nameText = succ.name;
+          ctx.font = "bold 9.5px Space Grotesk";
+          const textWidth = ctx.measureText(nameText).width;
+          
+          ctx.save();
+          ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+          ctx.strokeStyle = "rgba(0, 240, 255, 0.25)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          // Capsule bounding container
+          ctx.roundRect(succ.x - (textWidth / 2 + 5), succ.y + succ.r + 4, textWidth + 10, 14, 4);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+
+          // Capsule text
+          ctx.fillStyle = "#00f0ff";
+          ctx.textBaseline = "alphabetic";
+          ctx.fillText(nameText, succ.x, succ.y + succ.r + 14);
+        }
+      });
+    }
+
+
+    // ==================== 9. AUXILIARY RENDERING METHODS ====================
+    function drawScaleBasket(bx, by, weight, label, color) {
+      const h = canvas.height;
+      const basketY = by + h * 0.16;
+
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(bx, by);
+      ctx.lineTo(bx - 15, basketY);
+      ctx.moveTo(bx, by);
+      ctx.lineTo(bx + 15, basketY);
+      ctx.stroke();
+
+      ctx.strokeStyle = color;
+      ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(bx - 20, basketY);
+      ctx.lineTo(bx + 20, basketY);
+      ctx.stroke();
+
+      const weightH = Math.max(4, Math.min(30, weight * 0.35));
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.75;
+      ctx.fillRect(bx - 9, basketY - weightH, 18, weightH);
+      ctx.globalAlpha = 1.0;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 10px Space Grotesk"; // readable weights text scale
+      ctx.textAlign = "center";
+      ctx.fillText(`${label}: ${weight}h`, bx, basketY + 11);
+    }
+
+
+    // ==================== 10. MODAL DASHBOARD INTERACTION ====================
+    function claimMasterCert() {
+      triggerSuccessCelebration();
+      openCertModal();
+    }
+
+    function openCertModal() {
+      document.getElementById("certModal").classList.remove("hidden");
+    }
+
+    function closeCertModal() {
+      document.getElementById("certModal").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>
